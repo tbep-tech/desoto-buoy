@@ -35,6 +35,7 @@ dat <- bind_rows(dat208, dat209) %>%
   unite('DateTime', Date, Time, sep = ' ') %>% 
   mutate(
     DateTime = ymd_hms(DateTime)
-  )
+  ) %>% 
+  as.data.frame(stringsAsFactors = F)
 
 save(dat, file = here('data/dat.RData'))
