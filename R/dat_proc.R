@@ -4,12 +4,14 @@ library(tidyr)
 library(stringr)
 library(tbeptools)
 library(lubridate)
+library(here)
 
 # orig data
 load(file = 'data/dat.RData')
 dimorig <- dim(dat)
 
-pth <- '../data-raw/dat.1xlsx'
+pth <- here::here('data-raw/dat.xlsx')
+
 urlin <- 'https://files.pinellascounty.org/pw/FtDesotoTBEP/Ft_DeSoto_Buoys_Data.xlsx'
 if(file.exists(pth))
   file.remove(pth)
@@ -35,4 +37,4 @@ dat <- bind_rows(dat208, dat209) %>%
     DateTime = ymd_hms(DateTime)
   )
 
-save(dat, file = '../data/dat.RData', compress = 'xz')
+save(dat, file = here('data/dat.RData'), compress = 'xz')

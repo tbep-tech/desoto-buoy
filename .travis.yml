@@ -10,7 +10,7 @@ apt_packages:
 git:
   depth: false
 script:
-- Rscript -e 'source("R/build.R")'
+- Rscript -e 'source("R/dat_proc.R")'
 - Rscript -e 'testthat::test_dir("tests/testthat/")'
 - git config --global user.name "fawda123"
 - git config --global user.email "mbafs2012@gmail.com"
