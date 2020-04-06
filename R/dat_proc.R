@@ -37,4 +37,4 @@ dat <- bind_rows(dat208, dat209) %>%
     DateTime = ymd_hms(DateTime)
   )
 
-save(dat, file = here('data/dat.RData'), compress = 'xz')
+save(dat, file = here('data/dat.RData'))
