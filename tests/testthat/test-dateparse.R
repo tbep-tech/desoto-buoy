@@ -2,7 +2,7 @@ test_that("Checking date parse", {
   
   library(here)
   
-  load(file = here('data/dat.RData'))
+  dat <- readRDS(file = here('data/dat.RDS'))
   result <- anyNA(dat$DateTime)
   
   expect_false(result)
