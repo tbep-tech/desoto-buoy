@@ -2,7 +2,11 @@ language: r
 sudo: false
 cache: packages
 apt_packages:
-- libudunits2-dev
+ - libudunits2-dev
+ - libpoppler-cpp-dev
+ - libgdal-dev
+ - libgeos-dev
+ - libproj-dev
 git:
   depth: false
 script:
