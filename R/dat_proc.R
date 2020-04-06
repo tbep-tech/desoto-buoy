@@ -11,10 +11,14 @@ load(file = 'data/dat.RData')
 dimorig <- dim(dat)
 
 pth <- here::here('data-raw/dat.xlsx')
-
+dtfl <- here('data/dat.RData')
 urlin <- 'https://files.pinellascounty.org/pw/FtDesotoTBEP/Ft_DeSoto_Buoys_Data.xlsx'
+
+if(file.exists(dtfl))
+  file.remove(dtfl)
 if(file.exists(pth))
   file.remove(pth)
+
 read_dlcurrent(pth, urlin = urlin)
 
 dat208 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy208', na = '-') 
@@ -37,4 +41,4 @@ dat <- bind_rows(dat208, dat209) %>%
     DateTime = ymd_hms(DateTime)
   ) 
 
-save(dat, file = here('data/dat.RData'), version = 2)
+save(dat, file = dtfl, version = 2)
