@@ -1,0 +1,32 @@
+---
+title: "<h2>Ft. DeSota Buoy Data, Pinellas County</h2>"
+output: 
+  html_document:
+    css: styles.css
+runtime: shiny
+---
+  
+```{r, warning = F, message = F, echo = F}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, echo = F)
+
+library(shiny)
+library(plotly)
+library(tidyverse)
+
+# dat object
+load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/dat.RData"))
+
+downloadButtonRmd <- function (outputId, label = "Download", class = NULL, ...)  {
+  tags$a(id = outputId, class = paste("btn btn-default shiny-download-link", 
+                                      class), href = "", target = "_blank", download = NA, 
+         icon("download"), label, ...)
+}
+```
+
+```{r reactives}
+
+```
+
+```{r}
+dat
+```
