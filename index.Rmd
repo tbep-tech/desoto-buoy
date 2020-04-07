@@ -22,6 +22,10 @@ log <- readLines('log.txt')
 pars <- names(dat)
 pars <- pars[!pars  %in% c('Station ID', 'Year', 'DateTime')]
 
+# plotly layout
+leg <- list(orientation = 'h', xanchor = 'center', x = 0.5)
+xxs <- list(title = '')
+  
 downloadButtonRmd <- function (outputId, label = "Download", class = NULL, ...)  {
   tags$a(id = outputId, class = paste("btn btn-default shiny-download-link", 
                                       class), href = "", target = "_blank", download = NA, 
@@ -30,19 +34,6 @@ downloadButtonRmd <- function (outputId, label = "Download", class = NULL, ...) 
 ```
 
 Data current as of `r log`.
-
-```{r}
-column(12, 
-      column(4, 
-             selectInput('parsel', 'Select parameter:', choices = pars)
-             
-             ), 
-      column(4, 
-             selectInput('logsel', 'Log-axis?', choices = c(FALSE, TRUE))
-             )
-      )
-```
-
 
 ```{r reactives}
 # data to plot
@@ -72,14 +63,16 @@ plo <- reactive({
     p <- p %>% 
       layout(
         yaxis = list(title = parsel, type = "log"),
-        xaxis = list(title = '')
+        xaxis = xxs,
+        legend = leg
         )
   
   if(!logsel)
     p <- p %>% 
       layout(
         yaxis = list(title = parsel),
-        xaxis = list(title = '')
+        xaxis = xxs,
+        legend = leg
         )
   
   return(p)
@@ -88,6 +81,86 @@ plo <- reactive({
 ```
 
 ```{r}
+# wq data
+output$wqdwntab <- downloadHandler(
+  filename = function(){'wqdat.csv'},
+  content = function(file){
+    
+    # inputs
+    toplo <- toplo()
+    write.csv(toplo, file, quote = T, row.names = F)
+    
+  }
+)
+```
+
+# {.tabset}
+
+## Plot and download
+
+```{r}
+column(12, 
+      column(4, "Select parameter:" ),
+      column(4, "Log axis?"),
+      column(4, NULL)
+)
+column(12, 
+      column(4, 
+             selectInput('parsel', NULL, choices = pars)
+             ), 
+      column(4, 
+             selectInput('logsel', NULL, choices = c(FALSE, TRUE))
+             ), 
+      column(4, downloadButtonRmd('wqdwntab', 'Download')) 
+)
+```
+
+<br>
+<br>
+<br>
+
+```{r}
 output$plo <- renderPlotly(plo())
 plotlyOutput('plo')
 ```
+
+## Metadata
+
+### Ft. DeSoto Continuous Monitoring Buoy Data
+
+*Dataset Type*: non-spatial database 
+
+*Name of Data Source*: Ft_DeSoto_Buoys_Data
+
+*Number of Water Resources Sampled*: 2 Sites in Ft Desoto Bay
+
+*Datasource Abbreviation (dataset)*: Ft_DeSoto_Buoy208, Ft_DeSoto_Buoy209
+
+*Description of Datasource*: Continuous water quality data collected by YSI EMM 150 buoys at two locations in Ft DeSoto Bay Pinellas County, Florida.  Data is collected every 15 minutes. Depth of collection is fixed at approximately 0.75 meters from water surface.
+
+*Data Collection Locations*: Buoy 209 is located at 27.629, -82.710.  Buoy 208 located at 27.630 and -82.707. 
+
+*Data Parameters Collected*:  Station ID, Year (yyyy), Time (24 hour), Date (mmddyy), Temperature (ºC), Conductivity (µs/cm), Salinity (ppt), pH, Chlorophyll-a (mg/L), Pheophytin (mg/L), DO % (%), DO (mg/L) 
+
+*Method of Transferring Data to the Atlas*: Transfer via FTP site 
+
+*How Often Data is Transferred to the Atlas*: Quarterly
+
+*Data Current as of*: `r log`
+
+*Disclaimer/Use Constraints*: None 
+
+*Custodian Information*: 
+
+Pinellas County Public Works 
+
+Division of Environmental Management
+
+*Contact Name*: Emma Dontis
+
+*Contact Phone*: (727) 464-4425 
+
+*Contact E-mail*: [edontis@pinellascounty.org](mailto:edontis@pinellascounty.org)
+
+*Contact URL*: [www.pinellascounty.org](www.pinellascounty.org)
+
