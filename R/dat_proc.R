@@ -6,21 +6,18 @@ library(tbeptools)
 library(lubridate)
 library(here)
 
-# orig data
-load(file = 'data/dat.RData')
-dimorig <- dim(dat)
-
 pth <- here::here('data-raw/dat.xlsx')
 dtfl <- here('data/dat.RData')
 urlin <- 'https://files.pinellascounty.org/pw/FtDesotoTBEP/Ft_DeSoto_Buoys_Data.xlsx'
 
-if(file.exists(dtfl))
-  file.remove(dtfl)
+# remove so read_dlcurrent doesn't break
 if(file.exists(pth))
   file.remove(pth)
 
+# download data from ftp
 read_dlcurrent(pth, urlin = urlin)
 
+# import and process
 dat208 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy208', na = '-') 
 dat209 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy209', na = '-')  
 dat <- bind_rows(dat208, dat209) %>%  
@@ -42,3 +39,8 @@ dat <- bind_rows(dat208, dat209) %>%
   ) 
 
 save(dat, file = dtfl, version = 2)
+
+# log so commit is updated
+writeLines(as.character(Sys.time()), 'log.txt')
+
+
