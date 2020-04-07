@@ -35,8 +35,27 @@ dat <- bind_rows(dat208, dat209) %>%
   unite('Time', hrs, min, sec, sep = ':') %>% 
   unite('DateTime', Date, Time, sep = ' ') %>% 
   mutate(
-    DateTime = ymd_hms(DateTime)
-  ) 
+    DateTime = ymd_hms(DateTime) ,
+    DateTime = lubridate::round_date(DateTime, "15 minutes")
+  ) %>% 
+  arrange(`Station ID`, DateTime) %>% 
+  select(-Year) %>%
+  group_by(`Station ID`, DateTime) %>%
+  summarise_all(mean) %>%
+  ungroup() 
+
+# create complete time series
+tms <- range(dat$DateTime)
+tms <- seq(tms[1], tms[2], by = '15 min')
+
+tojn <- crossing(
+  `Station ID` = unique(dat$`Station ID`), 
+  DateTime = tms
+)
+
+# join with original 
+dat <- tojn %>% 
+  left_join(dat,by = c('Station ID', 'DateTime'))
 
 save(dat, file = dtfl, version = 2)
 
