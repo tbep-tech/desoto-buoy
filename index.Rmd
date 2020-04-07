@@ -5,7 +5,7 @@ output:
     css: styles.css
 runtime: shiny
 ---
-  
+
 ```{r, warning = F, message = F, echo = F}
 knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, echo = F)
 
@@ -16,6 +16,12 @@ library(tidyverse)
 # dat object
 load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/dat.RData"))
 
+# get data time stamp
+log <- readLines('log.txt')
+
+pars <- names(dat)
+pars <- pars[!pars  %in% c('Station ID', 'Year', 'DateTime')]
+
 downloadButtonRmd <- function (outputId, label = "Download", class = NULL, ...)  {
   tags$a(id = outputId, class = paste("btn btn-default shiny-download-link", 
                                       class), href = "", target = "_blank", download = NA, 
@@ -23,10 +29,65 @@ downloadButtonRmd <- function (outputId, label = "Download", class = NULL, ...) 
 }
 ```
 
-```{r reactives}
+Data current as of `r log`.
 
+```{r}
+column(12, 
+      column(4, 
+             selectInput('parsel', 'Select parameter:', choices = pars)
+             
+             ), 
+      column(4, 
+             selectInput('logsel', 'Log-axis?', choices = c(FALSE, TRUE))
+             )
+      )
+```
+
+
+```{r reactives}
+# data to plot
+toplo <- reactive({
+  
+  # inputs
+  parsel <- input$parsel
+
+  out <- dat %>% 
+    select(`Station ID`, DateTime, yvar = !!parsel) 
+  
+  return(out)
+  
+})
+
+# plotly output
+plo <- reactive({
+  
+  # inputs 
+  logsel <- as.logical(input$logsel)
+  parsel <- input$parsel
+  toplo <- toplo()
+  
+  p <- plot_ly(toplo, x = ~DateTime, y = ~yvar, color = ~factor(`Station ID`), type = 'scatter', mode = 'lines')
+  
+  if(logsel)
+    p <- p %>% 
+      layout(
+        yaxis = list(title = parsel, type = "log"),
+        xaxis = list(title = '')
+        )
+  
+  if(!logsel)
+    p <- p %>% 
+      layout(
+        yaxis = list(title = parsel),
+        xaxis = list(title = '')
+        )
+  
+  return(p)
+  
+})
 ```
 
 ```{r}
-dat
+output$plo <- renderPlotly(plo())
+plotlyOutput('plo')
 ```
