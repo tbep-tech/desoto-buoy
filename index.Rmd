@@ -98,6 +98,9 @@ output$wqdwntab <- downloadHandler(
     
     # inputs
     toplo <- toplo()
+    parsel <- input$parsel
+    names(toplo)[names(toplo) %in% 'yvar'] <- parsel
+    
     write.csv(toplo, file, quote = T, row.names = F)
     
   }
