@@ -23,26 +23,19 @@ dat209 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy209', na = '-')
 dat <- bind_rows(dat208, dat209) %>%  
   mutate(
     Date = mdy(Date),
-    Time = str_pad(Time, 4, pad = '0'),
-    Time = gsub('^([0-9][0-9])([0-9][0-9])$', '\\1\\:\\2', Time)
+    Time = str_pad(Time, 4, pad = '0')
     ) %>% 
-  separate(Time, c('hrs', 'min'), sep = ':') %>% 
-  mutate(
-    hrs = as.numeric(hrs), 
-    min = as.numeric(min), 
-    sec = 0
-  ) %>% 
-  unite('Time', hrs, min, sec, sep = ':') %>% 
   unite('DateTime', Date, Time, sep = ' ') %>% 
   mutate(
-    DateTime = ymd_hms(DateTime) ,
+    DateTime = ymd_hm(DateTime, tz = 'America/Jamaica'),
     DateTime = lubridate::round_date(DateTime, "15 minutes")
   ) %>% 
   arrange(`Station ID`, DateTime) %>% 
   select(-Year) %>%
   group_by(`Station ID`, DateTime) %>%
   summarise_all(mean) %>%
-  ungroup() 
+  ungroup() %>% 
+  mutate_if(is.numeric, ~ ifelse(. < 0, NaN, .))
 
 # create complete time series
 tms <- range(dat$DateTime)

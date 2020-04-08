@@ -19,8 +19,17 @@ load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/dat.RData
 # get data time stamp
 log <- readLines('log.txt')
 
-pars <- names(dat)
-pars <- pars[!pars  %in% c('Station ID', 'Year', 'DateTime')]
+# columns to pick
+pars <- list(
+  `Temperature (C)` = 'Temperature',
+  `Conductivity (us/cm)` = 'Conductivity', 
+  `Salinity (ppt)` = 'Salinity', 
+  `pH` = 'pH', 
+  `Chlorophyll-a (mg/L)` = 'Chlorophyll-a', 
+  `Pheophytin (mg/L)` = 'Pheophytin', 
+  `DO (%)` = 'DO%', 
+  `DO (mg/L)` = 'DO'
+)
 
 # plotly layout
 leg <- list(orientation = 'h', xanchor = 'center', x = 0.5)
@@ -57,12 +66,13 @@ plo <- reactive({
   parsel <- input$parsel
   toplo <- toplo()
   
+  ylab <- names(pars)[pars == parsel]
   p <- plot_ly(toplo, x = ~DateTime, y = ~yvar, color = ~factor(`Station ID`), type = 'scatter', mode = 'lines')
   
   if(logsel)
     p <- p %>% 
       layout(
-        yaxis = list(title = parsel, type = "log"),
+        yaxis = list(title = ylab, type = "log"),
         xaxis = xxs,
         legend = leg
         )
@@ -70,7 +80,7 @@ plo <- reactive({
   if(!logsel)
     p <- p %>% 
       layout(
-        yaxis = list(title = parsel),
+        yaxis = list(title = ylab),
         xaxis = xxs,
         legend = leg
         )
@@ -128,39 +138,39 @@ plotlyOutput('plo')
 
 ### Ft. DeSoto Continuous Monitoring Buoy Data
 
-*Dataset Type*: non-spatial database 
+__Dataset Type__: non-spatial database 
 
-*Name of Data Source*: Ft_DeSoto_Buoys_Data
+__Name of Data Source__: Ft_DeSoto_Buoys_Data
 
-*Number of Water Resources Sampled*: 2 Sites in Ft Desoto Bay
+__Number of Water Resources Sampled__: 2 Sites in Ft Desoto Bay
 
-*Datasource Abbreviation (dataset)*: Ft_DeSoto_Buoy208, Ft_DeSoto_Buoy209
+__Datasource Abbreviation (dataset)__: Ft_DeSoto_Buoy208, Ft_DeSoto_Buoy209
 
-*Description of Datasource*: Continuous water quality data collected by YSI EMM 150 buoys at two locations in Ft DeSoto Bay Pinellas County, Florida.  Data is collected every 15 minutes. Depth of collection is fixed at approximately 0.75 meters from water surface.
+__Description of Datasource__: Continuous water quality data collected by YSI EMM 150 buoys at two locations in Ft DeSoto Bay Pinellas County, Florida.  Data is collected every 15 minutes. Depth of collection is fixed at approximately 0.75 meters from water surface.
 
-*Data Collection Locations*: Buoy 209 is located at 27.629, -82.710.  Buoy 208 located at 27.630 and -82.707. 
+__Data Collection Locations__: Buoy 209 is located at 27.629, -82.710.  Buoy 208 located at 27.630 and -82.707. 
 
-*Data Parameters Collected*:  Station ID, Year (yyyy), Time (24 hour), Date (mmddyy), Temperature (ºC), Conductivity (µs/cm), Salinity (ppt), pH, Chlorophyll-a (mg/L), Pheophytin (mg/L), DO % (%), DO (mg/L) 
+__Data Parameters Collected__:  Station ID, Year (yyyy), Time (24 hour, EST), Date (mmddyy), Temperature (ºC), Conductivity (µs/cm), Salinity (ppt), pH, Chlorophyll-a (mg/L), Pheophytin (mg/L), DO % (%), DO (mg/L) 
 
-*Method of Transferring Data to the Atlas*: Transfer via FTP site 
+__Method of Transferring Data to the Atlas__: Transfer via FTP site 
 
-*How Often Data is Transferred to the Atlas*: Quarterly
+__How Often Data is Transferred to the Atlas__: Quarterly
 
-*Data Current as of*: `r log`
+__Data Current as of__: `r log`
 
-*Disclaimer/Use Constraints*: None 
+__Disclaimer/Use Constraints__: None 
 
-*Custodian Information*: 
+__Custodian Information__: 
 
 Pinellas County Public Works 
 
 Division of Environmental Management
 
-*Contact Name*: Emma Dontis
+__Contact Name__: Emma Dontis
 
-*Contact Phone*: (727) 464-4425 
+__Contact Phone__: (727) 464-4425 
 
-*Contact E-mail*: [edontis@pinellascounty.org](mailto:edontis@pinellascounty.org)
+__Contact E-mail__: [edontis@pinellascounty.org](mailto:edontis@pinellascounty.org)
 
-*Contact URL*: [www.pinellascounty.org](www.pinellascounty.org)
+__Contact URL__: [www.pinellascounty.org](www.pinellascounty.org)
 
