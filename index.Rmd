@@ -17,7 +17,7 @@ library(tidyverse)
 load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/dat.RData"))
 
 # get data time stamp
-log <- readLines('log.txt')
+log <- readLines('https://www.github.com/tbep-tech/desoto-buoy/raw/master/log.txt')
 
 # columns to pick
 pars <- list(
