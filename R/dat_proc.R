@@ -59,6 +59,6 @@ dat <- tojn %>%
 save(dat, file = dtfl, version = 2)
 
 # log so commit is updated
-writeLines(as.character(Sys.time()), 'log.txt')
+writeLines(as.character(paste(Sys.time(), Sys.timezone())), 'log.txt')
 
 
