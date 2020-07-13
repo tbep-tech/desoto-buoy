@@ -17,14 +17,20 @@ if(file.exists(pth))
 # download data from ftp
 read_dlcurrent(pth, urlin = urlin)
 
+# col types
+coltyps <- c('numeric', 'numeric', 'text', 'date', rep('numeric', 8))
+
 # import and process
-dat208 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy208', na = '-') 
-dat209 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy209', na = '-')  
+dat208 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy208', na = '-', col_types = coltyps) 
+dat209 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy209', na = '-', col_types = coltyps)  
 dat <- bind_rows(dat208, dat209) %>%  
   mutate(
-    Date = mdy(Date),
-    Time = str_pad(Time, 4, pad = '0')
-    ) %>% 
+    Date = ymd(Date),
+    Time = case_when(
+      !grepl(':', Time) ~ format(as.POSIXct(Sys.Date() + as.numeric(Time)), "%H:%M", tz="America/Jamaica"),
+      T ~ Time
+    )
+  ) %>% 
   unite('DateTime', Date, Time, sep = ' ') %>% 
   mutate(
     DateTime = ymd_hm(DateTime, tz = 'America/Jamaica'),
