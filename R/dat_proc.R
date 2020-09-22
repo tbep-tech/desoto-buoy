@@ -28,7 +28,7 @@ dat <- bind_rows(dat208, dat209) %>%
     Date = ymd(Date),
     Time = case_when(
       !grepl(':', Time) ~ format(as.POSIXct(Sys.Date() + as.numeric(Time)), "%H:%M", tz="America/Jamaica"),
-      T ~ Time
+      T ~ as.character(Time)
     )
   ) %>% 
   unite('DateTime', Date, Time, sep = ' ') %>% 
