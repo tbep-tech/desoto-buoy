@@ -1,12 +1,10 @@
 # README
 
-[![Build Status](https://travis-ci.org/tbep-tech/desoto-buoy.svg?branch=master)](https://travis-ci.org/tbep-tech/desoto-buoy)
-
 [![DOI](https://zenodo.org/badge/252561560.svg)](https://zenodo.org/badge/latestdoi/252561560)
 
 [Shiny website](http://shiny.tbep.org/desoto-buoy/)
 
-Build is completed daily on Travis to process raw data in [R/dat_proc.R](https://github.com/tbep-tech/desoto-buoy/blob/master/R/dat_proc.R) and run checks.  
+Build is completed daily with GitHub actions to process raw data in [R/dat_proc.R](https://github.com/tbep-tech/desoto-buoy/blob/master/R/dat_proc.R) and run checks.  
 
 Processing includes: 
 

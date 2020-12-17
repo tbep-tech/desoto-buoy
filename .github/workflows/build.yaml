@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+      - main
+      - master
+  schedule:
+    - cron: "0 12 * * *"
+    
+name: build 
+
+jobs:
+  render:
+    name: build
+    runs-on: macOS-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - name: Install dependencies
+        run: |
+          install.packages(c("dplyr", "here", "tidyr", "lubridate", "stringr", "remotes", "readxl", "testthat"))
+          remotes::install_github("tbep-tech/tbeptools")
+        shell: Rscript {0}
+      - name: Update data
+        run: Rscript -e 'source("R/dat_proc.R")'
+      - name: Run tests
+        run: Rscript -e "library(testthat); testthat::test_dir('tests/testthat', reporter = c('progress', 'fail'))"
+      - name: Commit results
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add -A
+          git commit -m 'Re-build data and run tests' || echo "No changes to commit"
+          git push origin || echo "No changes to commit"
