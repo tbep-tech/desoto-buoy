@@ -1,5 +1,6 @@
 # README
 
+[![build](https://github.com/tbep-tech/desoto-buoy/workflows/build/badge.svg)](https://github.com/tbep-tech/desoto-buoy/actions)
 [![DOI](https://zenodo.org/badge/252561560.svg)](https://zenodo.org/badge/latestdoi/252561560)
 
 [Shiny website](http://shiny.tbep.org/desoto-buoy/)
