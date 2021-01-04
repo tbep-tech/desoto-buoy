@@ -5,6 +5,10 @@ library(stringr)
 library(tbeptools)
 library(lubridate)
 library(here)
+library(utils)
+library(sf)
+
+# buoy data ---------------------------------------------------------------
 
 pth <- here::here('data-raw/dat.xlsx')
 dtfl <- here('data/dat.RData')
@@ -61,4 +65,18 @@ save(dat, file = dtfl, version = 2)
 # log so commit is updated
 writeLines(as.character(paste(Sys.time(), Sys.timezone())), 'log.txt')
 
+# prop scarring data ------------------------------------------------------
+
+# download zip gdb, unzip, all in temp files
+url <- 'https://files.pinellascounty.org/pw/FtDesotoTBEP/propscar.gdb.zip'
+tmp1 <- tempfile()
+tmp2 <- tempfile()
+download.file(url, destfile = tmp1)
+unzip(tmp1, exdir = tmp2)
+gdb <- list.files(tmp2, full.names = T)
+# st_layers(gdb)
+
+propscarlines <- sf::st_read(dsn = gdb, layer = 'propscarlines')
+
+save(propscarlines, file = 'data/propscarlines.RData', version = 2)
 

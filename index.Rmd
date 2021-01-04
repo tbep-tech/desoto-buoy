@@ -12,9 +12,13 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F, echo = F)
 library(shiny)
 library(plotly)
 library(tidyverse)
+library(mapview)
 
 # dat object
 load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/dat.RData"))
+
+# propscar object
+load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/propscarlines.RData"))
 
 # get data time stamp
 log <- readLines('https://www.github.com/tbep-tech/desoto-buoy/raw/master/log.txt')
@@ -136,6 +140,14 @@ column(12,
 output$plo <- renderPlotly(plo())
 plotlyOutput('plo')
 ```
+
+
+## Prop scarring data
+
+```{r, out.width = '100%'}
+mapview(propscarlines, layer.name = 'Prop scar length (m)', homebutton = F)
+```
+
 
 ## Metadata
 
