@@ -18,6 +18,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
+      - name: Install macOS dependencies for tbeptools
+        run: |
+          brew install cairo
+          brew install gdal
       - name: Install dependencies
         run: |
           install.packages(c("dplyr", "here", "tidyr", "lubridate", "stringr", "remotes", "readxl", "testthat"))
