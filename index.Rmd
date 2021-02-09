@@ -47,7 +47,7 @@ downloadButtonRmd <- function (outputId, label = "Download", class = NULL, ...) 
 }
 ```
 
-Data current as of `r log`.
+Data current as of `r log`. Source code [here](https://github.com/tbep-tech/desoto-buoy)/
 
 ```{r reactives}
 # data to plot
@@ -192,10 +192,3 @@ __Contact E-mail__: [edontis@pinellascounty.org](mailto:edontis@pinellascounty.o
 __Contact URL__: [www.pinellascounty.org](www.pinellascounty.org)
 
 
-
-## Prop scarring data
-
-```{r}
-output$scrmap <- renderLeaflet(scrmap())
-leafletOutput('scrmap')
-```
