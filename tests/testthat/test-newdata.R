@@ -6,7 +6,7 @@ test_that("Checking new data, will break if data are added", {
   load(file = here('data/dat.RData'))
   result <- nrow(dat)
   
-  expect_equal(result, 70494)
+  expect_equal(result, 115862)
   
 })
 
