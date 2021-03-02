@@ -22,14 +22,17 @@ if(file.exists(pth))
 read_dlcurrent(pth, urlin = urlin)
 
 # col types
-coltyps <- c('numeric', 'numeric', 'text', 'date', rep('numeric', 8))
+coltyps <- c('numeric', 'numeric', 'text', 'text', rep('numeric', 8))
 
 # import and process
 dat208 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy208', na = '-', col_types = coltyps) 
 dat209 <- read_excel(pth, sheet = 'Ft_DeSoto_Buoy209', na = '-', col_types = coltyps)  
 dat <- bind_rows(dat208, dat209) %>%  
   mutate(
-    Date = ymd(Date),
+    Date = case_when(
+      grepl('/', Date) ~ mdy(Date),
+      T ~ as.Date(as.numeric(Date), origin = '1900-01-01')
+    ),
     Time = case_when(
       !grepl(':', Time) ~ format(as.POSIXct(Sys.Date() + as.numeric(Time)), "%H:%M", tz="America/Jamaica"),
       T ~ as.character(Time)
@@ -40,7 +43,7 @@ dat <- bind_rows(dat208, dat209) %>%
     DateTime = ymd_hm(DateTime, tz = 'America/Jamaica'),
     DateTime = lubridate::round_date(DateTime, "15 minutes")
   ) %>% 
-  arrange(`Station ID`, DateTime) %>% 
+  arrange(`Station ID`, DateTime) %>%
   select(-Year) %>%
   group_by(`Station ID`, DateTime) %>%
   summarise_all(mean) %>%
