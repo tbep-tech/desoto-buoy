@@ -47,7 +47,7 @@ downloadButtonRmd <- function (outputId, label = "Download", class = NULL, ...) 
 }
 ```
 
-Data current as of `r log`. Source code [here](https://github.com/tbep-tech/desoto-buoy)/
+Data current as of `r log`. Source code [here](https://github.com/tbep-tech/desoto-buoy).
 
 ```{r reactives}
 # data to plot
