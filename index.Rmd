@@ -16,8 +16,8 @@ library(mapview)
 library(leaflet)
 
 # dat object
-load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/dat.RData"))
-
+# load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/dat.RData"))
+data(dat)
 # propscar object
 load(url("https://www.github.com/tbep-tech/desoto-buoy/raw/master/data/propscarlines.RData"))
 
