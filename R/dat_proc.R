@@ -172,16 +172,16 @@ writeLines(as.character(paste(Sys.time(), Sys.timezone())), 'log.txt')
 
 # prop scarring data ------------------------------------------------------
 
-# download zip gdb, unzip, all in temp files
-url <- 'https://files.pinellascounty.org/pw/FtDesotoTBEP/propscar.gdb.zip'
-tmp1 <- tempfile()
-tmp2 <- tempfile()
-download.file(url, destfile = tmp1)
-unzip(tmp1, exdir = tmp2)
-gdb <- list.files(tmp2, full.names = T)
-# st_layers(gdb)
-
-propscarlines <- sf::st_read(dsn = gdb, layer = 'propscarlines')
-
-save(propscarlines, file = 'data/propscarlines.RData', version = 2)
+# # download zip gdb, unzip, all in temp files
+# url <- 'https://files.pinellascounty.org/pw/FtDesotoTBEP/propscar.gdb.zip'
+# tmp1 <- tempfile()
+# tmp2 <- tempfile()
+# download.file(url, destfile = tmp1)
+# unzip(tmp1, exdir = tmp2)
+# gdb <- list.files(tmp2, full.names = T)
+# # st_layers(gdb)
+# 
+# propscarlines <- sf::st_read(dsn = gdb, layer = 'propscarlines')
+# 
+# save(propscarlines, file = 'data/propscarlines.RData', version = 2)
 
