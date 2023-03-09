@@ -3,8 +3,6 @@ on:
     branches:
       - main
       - master
-  schedule:
-    - cron: "0 0 * * 1"
     
 name: build 
 
@@ -16,18 +14,27 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - uses: r-lib/actions/setup-r@v1
-      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          extra-repositories: 'https://tbep-tech.r-universe.dev'
+      - uses: r-lib/actions/setup-pandoc@v2
       - name: Install macOS dependencies for tbeptools
         run: |
           rm -rf /usr/local/bin/gfortran
           brew install cairo
           brew install gdal
       - name: Install dependencies
-        run: |
-          install.packages(c("dplyr", "here", "tidyr", "lubridate", "stringr", "remotes", "readxl", "testthat"))
-          remotes::install_github("tbep-tech/tbeptools")
-        shell: Rscript {0}
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::dplyr
+            any::here
+            any::tidyr
+            any::lubridate
+            any::stringr
+            any::readxl
+            any::testthat
+            tbeptools
       - name: Update data
         run: Rscript -e 'source("R/dat_proc.R")'
       - name: Run tests
