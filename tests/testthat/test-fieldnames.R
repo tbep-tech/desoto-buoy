@@ -4,7 +4,7 @@ test_that("Checking field names", {
   result <- names(dat)
   
   expect_equal(result, c("Station ID", "DateTime", "Temperature", "Conductivity", "Salinity", 
-                         "pH", "Chlorophyll-a", "Pheophytin", "DO%", "DO")
+                         "pH", "Chlorophyll-a", "Phaeophytin", "DO%", "DO")
   )
   
 })

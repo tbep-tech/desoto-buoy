@@ -18,11 +18,6 @@ jobs:
         with:
           extra-repositories: 'https://tbep-tech.r-universe.dev'
       - uses: r-lib/actions/setup-pandoc@v2
-      - name: Install macOS dependencies for tbeptools
-        run: |
-          rm -rf /usr/local/bin/gfortran
-          brew install cairo
-          brew install gdal
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
